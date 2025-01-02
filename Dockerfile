@@ -22,6 +22,8 @@ COPY requirements.txt .
 RUN --mount=type=cache,target=/root/.cache/pip \
     python -m pip install -r requirements.txt
 
+RUN chown appuser /app
+
 USER appuser
 
 COPY . .
