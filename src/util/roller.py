@@ -1,6 +1,6 @@
 from util.card import Card, CardType
 from random import randint
-from lib.cards import people, special_people, people_list
+from people.cards import people, special_people, people_list
 
 
 def gen_card() -> Card:
