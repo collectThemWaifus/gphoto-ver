@@ -13,17 +13,20 @@
     {
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
-          shellHook = ''
-            set -a
-            source $PWD/.env
-            set +a
-          '';
           venvDir = ".venv";
-          packages = with pkgs; [ python311 ] ++
+          packages = with pkgs; [ python311 postgresql] ++
             (with pkgs.python311Packages; [
               pip
               venvShellHook
             ]);
+          postVenvCreation = ''
+              echo First time install, installing requimrents.txt
+              unset SOURCE_DATE_EPOCH
+              pip install -r requirements.txt
+          '';
+          postShellHook = ''
+            source .env
+          '';
         };
       });
     };
