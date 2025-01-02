@@ -1,0 +1,11 @@
+
+services:
+  discord_bot:
+    container_name: people_collection_bot
+    logging:
+      driver: "json-file"
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
