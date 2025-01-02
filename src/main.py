@@ -3,6 +3,7 @@ import os
 import logging
 
 from discord.ext import commands
+from db import db
 
 class CardCollectorBot(commands.Bot):
     def __init__(self) -> None:
@@ -19,6 +20,7 @@ class CardCollectorBot(commands.Bot):
 
     async def setup_hook(self) -> None:
         self.remove_command('help')
+        db.setup()
         await self.load_extensions()
         await bot.tree.sync()
  

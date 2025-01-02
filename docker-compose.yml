@@ -9,3 +9,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    networks:
+      - db
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: people_collection
+      POSTGRES_PASSWORD: people_collection
+    ports:
+      - "5432:5432"
+networks:
+  db:
+    driver: brdige
+
