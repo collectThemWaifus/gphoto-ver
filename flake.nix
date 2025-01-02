@@ -18,6 +18,7 @@
             (with pkgs.python311Packages; [
               pip
               venvShellHook
+              psycopg2
             ]);
           postVenvCreation = ''
               echo First time install, installing requimrents.txt
