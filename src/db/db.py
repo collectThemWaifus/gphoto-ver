@@ -2,20 +2,16 @@ import contextlib
 from os import environ, listdir
 from typing import Generator
 
-import psycopg2.pool
-from psycopg2.extensions import cursor
+import psycopg
+import psycopg_pool
 
-dbpool = psycopg2.pool.ThreadedConnectionPool(
-    host=       environ.get("") or "127.0.0.1",
-    port=       environ.get("") or "5432",
-    user=       environ.get("") or "people_collection",
-    password=   environ.get("") or "people_collection",
-    minconn=1,
-    maxconn=5
+dbpool = psycopg_pool.ConnectionPool(
+    conninfo=environ.get('psql_connection_string') or
+             'postgresql://people_collection:people_collection@127.0.0.1/people_collection'
 )
 
 @contextlib.contextmanager
-def db_cursor () -> Generator[cursor, None, None]:
+def db_cursor () -> Generator[psycopg.cursor, None, None]:
     conn = dbpool.getconn()
     try:
         with conn.cursor() as cur:
