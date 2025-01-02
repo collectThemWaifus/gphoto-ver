@@ -13,6 +13,11 @@
     {
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
+          shellHook = ''
+            set -a
+            source $PWD/.env
+            set +a
+          '';
           venvDir = ".venv";
           packages = with pkgs; [ python311 ] ++
             (with pkgs.python311Packages; [
