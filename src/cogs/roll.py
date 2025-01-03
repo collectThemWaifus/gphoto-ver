@@ -1,10 +1,12 @@
 import discord
-import io
+
 from discord.ext import commands
 import util.roller as roller
 import util.image as modifier
 from util.card import CardType
 from PIL import Image
+
+import io
 
 class Roll(commands.Cog):
 

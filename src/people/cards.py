@@ -1,4 +1,4 @@
-from util.card import Card, CardType
+from util.card import Card
 
 people_list = ["Sangmin", "Neil"]
 
