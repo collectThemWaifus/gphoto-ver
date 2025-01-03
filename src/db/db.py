@@ -7,11 +7,11 @@ import psycopg_pool
 
 dbpool = psycopg_pool.ConnectionPool(
     conninfo=environ.get('psql_connection_string') or
-             'postgresql://people_collection:people_collection@127.0.0.1/people_collection'
+             'postgresql://people_collection:people_collection@postgresdb/people_collection'
 )
 
 @contextlib.contextmanager
-def db_cursor () -> Generator[psycopg.cursor, None, None]:
+def db_cursor () -> Generator[psycopg.cursor.Cursor, None, None]:
     conn = dbpool.getconn()
     try:
         with conn.cursor() as cur:
@@ -24,7 +24,7 @@ def db_cursor () -> Generator[psycopg.cursor, None, None]:
         dbpool.putconn(conn)
 
 def setup ():
-    for filename in listdir("sql/setup/"):
+    for filename in listdir("src/db/sql/setup/"):
         if filename.endswith(".sql"):
             with db_cursor() as cur:
-                cur.execute( open( f"sql/setup/{filename}",'r').read())
+                cur.execute( open( f"src/db/sql/setup/{filename}",'r').read())

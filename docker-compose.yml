@@ -11,14 +11,16 @@ services:
       dockerfile: Dockerfile
     networks:
       - db
-  db:
-    image: postgres
+  postgresdb:
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_USER: people_collection
       POSTGRES_PASSWORD: people_collection
     ports:
       - "5432:5432"
+    networks:
+      - db
 networks:
   db:
     driver: bridge

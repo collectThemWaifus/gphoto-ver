@@ -24,5 +24,5 @@ class CardCollectorBot(commands.Bot):
         await bot.tree.sync()
  
 bot = CardCollectorBot()
-bot.run(os.environ.get("APIKEY"))
+bot.run(os.getenv("APIKEY"))
 
