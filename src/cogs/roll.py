@@ -15,18 +15,23 @@ class Roll(commands.Cog):
     async def roll(self, interaction: discord.Interaction) -> None:
 
         card = roller.gen_card()
+        color = discord.Color.light_grey()
 
         with Image.open(card.image_path).convert("RGBA") as image:
             card.image = image
             match card.card_type:
                 case CardType.LOWQ:
                     image = modifier.low_quality(image)
+                    color = discord.Color.dark_grey()
                 case CardType.FOIL:
                     image = modifier.foil(image)
+                    color = discord.Color.blue()
                 case CardType.HOLO:
                     image = modifier.holo(image)
+                    color = discord.Color.green()
                 case CardType.SHINY:
                     image = modifier.shiny(image)
+                    color = discord.Color.pink()
             buffer = io.BytesIO()
             image.save(buffer, format="PNG")
             buffer.seek(0)
@@ -35,7 +40,7 @@ class Roll(commands.Cog):
             
         embed = discord.Embed(
             description=f'You just rolled a... {card} Nice!',
-            color=discord.Color.green()
+            color=color
         )
         embed.set_image(url="attachment://card.png")
         await interaction.response.send_message(embed=embed, file=file)
