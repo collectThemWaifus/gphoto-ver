@@ -1,4 +1,5 @@
 import contextlib
+import os
 from os import environ, listdir
 from typing import Generator
 
@@ -24,7 +25,8 @@ def db_cursor () -> Generator[psycopg.cursor, None, None]:
         dbpool.putconn(conn)
 
 def setup ():
-    for filename in listdir("sql/setup/"):
+    file_path = os.path.realpath(__file__)
+    for filename in listdir("src/db/sql/setup/"):
         if filename.endswith(".sql"):
             with db_cursor() as cur:
-                cur.execute( open( f"sql/setup/{filename}",'r').read())
+                cur.execute( open( f"src/db/sql/setup/{filename}",'r').read())
