@@ -27,7 +27,7 @@ class Roll(commands.Cog):
                     color = discord.Color.dark_grey()
                 case CardType.FOIL:
                     image = modifier.foil(image)
-                    color = discord.Color.blue()
+                    color = discord.Color.blurple()
                 case CardType.HOLO:
                     image = modifier.holo(image)
                     color = discord.Color.green()
