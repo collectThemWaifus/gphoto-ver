@@ -1,7 +1,10 @@
 discord.log
+test.py
+output.png
 
 # direnv
 .direnv
+.env.sh
 #ides
 .idea
 .vscode
