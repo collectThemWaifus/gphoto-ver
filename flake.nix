@@ -18,6 +18,7 @@
             (with pkgs.python311Packages; [
               pip
               venvShellHook
+              numpy
             ]);
           postVenvCreation = ''
               echo First time install, installing requimrents.txt
