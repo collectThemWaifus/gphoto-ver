@@ -1,6 +1,5 @@
 import discord
 import os
-import logging
 
 from discord.ext import commands
 from db import db
@@ -25,6 +24,5 @@ class CardCollectorBot(commands.Bot):
         await bot.tree.sync()
  
 bot = CardCollectorBot()
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-bot.run(os.environ.get("APIKEY"), log_handler=handler)
+bot.run(os.getenv("APIKEY"))
 
