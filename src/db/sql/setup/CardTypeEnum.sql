@@ -1,0 +1,1 @@
+CREATE TYPE CardType AS ENUM ( 'NONE', 'LOWQ', 'FOIL', 'HOLO', 'SHINY')
