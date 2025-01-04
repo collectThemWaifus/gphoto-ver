@@ -25,7 +25,7 @@
               pip install -r requirements.txt
           '';
           postShellHook = ''
-            source .env
+            export $(cat .env | xargs)
           '';
         };
       });
