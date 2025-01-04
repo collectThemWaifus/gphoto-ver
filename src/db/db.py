@@ -5,6 +5,10 @@ from typing import Generator
 
 import psycopg
 import psycopg_pool
+from psycopg.errors import DuplicateObject
+from psycopg.types.enum import EnumInfo, register_enum
+
+from util.card import CardType
 
 dbpool = psycopg_pool.ConnectionPool(
     conninfo=environ.get('psql_connection_string') or
@@ -14,6 +18,8 @@ dbpool = psycopg_pool.ConnectionPool(
 @contextlib.contextmanager
 def db_cursor () -> Generator[psycopg.cursor.Cursor, None, None]:
     conn = dbpool.getconn()
+    info = EnumInfo.fetch(conn, 'CardType')
+    register_enum(info,conn, CardType)
     try:
         with conn.cursor() as cur:
             yield cur
@@ -28,4 +34,8 @@ def setup ():
     for filename in listdir("src/db/sql/setup/"):
         if filename.endswith(".sql"):
             with db_cursor() as cur:
-                cur.execute( open( f"src/db/sql/setup/{filename}",'r').read())
+                try:
+                    cur.execute( open( f"src/db/sql/setup/{filename}",'r').read())
+                except DuplicateObject:
+                    print('ignoring dup obj error')
+                    pass
