@@ -1,6 +1,6 @@
 from util.card import Card, CardType
 from random import randint
-from people.cards import people, special_people, people_list
+from people.cards import all_people_cards, all_special_cards
 
 
 def gen_card() -> Card:
@@ -9,8 +9,7 @@ def gen_card() -> Card:
     """
 
     is_special = randint(0, 1000) == 69
-    person = people[people_list[randint(0, len(people) - 1)]] if not is_special else special_people[people_list[randint(0, len(special_people) - 1)]]
-    card = person[randint(0, len(person) - 1)]
+    card = all_special_cards[randint(0, len(all_special_cards) - 1)] if is_special else all_people_cards[randint(0, len(all_people_cards) - 1)]
     return add_modifier(card)
 
 def add_modifier(card: Card) -> Card:
