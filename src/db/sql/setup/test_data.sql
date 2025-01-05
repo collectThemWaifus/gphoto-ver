@@ -1,0 +1,1 @@
+INSERT INTO users (id, points, duplicates, achievements) VALUES ('test1', 0, 0, 0);

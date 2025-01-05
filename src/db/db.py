@@ -1,5 +1,4 @@
 import contextlib
-import os
 from os import environ, listdir
 from typing import Generator
 
@@ -10,16 +9,16 @@ from psycopg.types.enum import EnumInfo, register_enum
 
 from util.card import CardType
 
-dbpool = psycopg_pool.ConnectionPool(
-    conninfo=environ.get('psql_connection_string') or
-             'postgresql://people_collection:people_collection@postgresdb/people_collection'
-)
+def configure_conn(conn: psycopg.Connection) -> None:
+    try:
+        info = EnumInfo.fetch(conn, 'card_type')
+        register_enum(info, conn, CardType)
+    except TypeError:
+        print("Could not register card_type enum (a single one of these messages is expected)")
 
 @contextlib.contextmanager
-def db_cursor () -> Generator[psycopg.cursor.Cursor, None, None]:
+def db_cursor() -> Generator[psycopg.cursor.Cursor, None, None]:
     conn = dbpool.getconn()
-    info = EnumInfo.fetch(conn, 'CardType')
-    register_enum(info,conn, CardType)
     try:
         with conn.cursor() as cur:
             yield cur
@@ -30,12 +29,23 @@ def db_cursor () -> Generator[psycopg.cursor.Cursor, None, None]:
     finally:
         dbpool.putconn(conn)
 
-def setup ():
-    for filename in listdir("src/db/sql/setup/"):
-        if filename.endswith(".sql"):
+def execute_file(filename: str) -> None:
+    if filename.endswith(".sql"):
             with db_cursor() as cur:
                 try:
-                    cur.execute( open( f"src/db/sql/setup/{filename}",'r').read())
+                    cur.execute(open(filename,'r').read())
                 except DuplicateObject:
                     print('ignoring dup obj error')
-                    pass
+
+def setup() -> None:
+    for filename in listdir("src/db/sql/enums/"):
+        execute_file(f"src/db/sql/enums/{filename}") 
+    for filename in listdir("src/db/sql/setup/"):
+        execute_file(f"src/db/sql/setup/{filename}")
+
+
+dbpool = psycopg_pool.ConnectionPool(
+    conninfo=environ.get('psql_connection_string') or
+        'postgresql://people_collection:people_collection@postgresdb/people_collection',
+    configure=configure_conn
+)
