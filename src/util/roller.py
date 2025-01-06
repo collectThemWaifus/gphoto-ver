@@ -12,10 +12,10 @@ class RollerUtils:
 
         is_special = randint(0, 1000) == 69
         card = all_special_cards[randint(0, len(all_special_cards) - 1)] if is_special else all_people_cards[randint(0, len(all_people_cards) - 1)]
-        return RollerUtils.add_modifier(card)
+        return RollerUtils.__add_modifier(card)
 
     @staticmethod
-    def add_modifier(card: Card) -> Card:
+    def __add_modifier(card: Card) -> Card:
         n = randint(0, 1000)
 
         if n == 1000: card.card_type = CardType.SHINY
