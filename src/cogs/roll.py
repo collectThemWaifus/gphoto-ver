@@ -22,16 +22,16 @@ class Roll(commands.Cog):
             card.image = image
             match card.card_type:
                 case CardType.LOWQ:
-                    image = CardImageUtils.low_quality(image)
+                    image = CardUtils.low_quality(image)
                     color = discord.Color.dark_grey()
                 case CardType.FOIL:
-                    image = CardImageUtils.foil(image)
+                    image = CardUtils.foil(image)
                     color = discord.Color.blurple()
                 case CardType.HOLO:
-                    image = CardImageUtils.holo(image)
+                    image = CardUtils.holo(image)
                     color = discord.Color.green()
                 case CardType.SHINY:
-                    image = CardImageUtils.shiny(image)
+                    image = CardUtils.shiny(image)
                     color = discord.Color.pink()
             buffer = io.BytesIO()
             image.save(buffer, format="PNG")
