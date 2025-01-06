@@ -1,9 +1,8 @@
 import discord
 
 from discord.ext import commands
-import util.roller as roller
-import util.image as modifier
-from util.card import CardType
+from util.roller import RollerUtils
+from util.card import CardType, CardUtils
 from PIL import Image
 
 import io
@@ -16,23 +15,23 @@ class Roll(commands.Cog):
     @discord.app_commands.command(name= 'roll', description = 'Roll for a card')
     async def roll(self, interaction: discord.Interaction) -> None:
 
-        card = roller.gen_card()
+        card = RollerUtils.gen_card()
         color = discord.Color.light_grey()
 
         with Image.open(card.image_path).convert("RGBA") as image:
             card.image = image
             match card.card_type:
                 case CardType.LOWQ:
-                    image = modifier.low_quality(image)
+                    image = CardUtils.low_quality(image)
                     color = discord.Color.dark_grey()
                 case CardType.FOIL:
-                    image = modifier.foil(image)
+                    image = CardUtils.foil(image)
                     color = discord.Color.blurple()
                 case CardType.HOLO:
-                    image = modifier.holo(image)
+                    image = CardUtils.holo(image)
                     color = discord.Color.green()
                 case CardType.SHINY:
-                    image = modifier.shiny(image)
+                    image = CardUtils.shiny(image)
                     color = discord.Color.pink()
             buffer = io.BytesIO()
             image.save(buffer, format="PNG")

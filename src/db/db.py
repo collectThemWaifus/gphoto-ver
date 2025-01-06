@@ -14,7 +14,7 @@ def configure_conn(conn: psycopg.Connection) -> None:
         info = EnumInfo.fetch(conn, 'card_type')
         register_enum(info, conn, CardType)
     except TypeError:
-        print("Could not register card_type enum (a single one of these messages is expected)")
+        print("Could not register card_type enum (expect this message on startup)")
 
 @contextlib.contextmanager
 def db_cursor() -> Generator[psycopg.cursor.Cursor, None, None]:
