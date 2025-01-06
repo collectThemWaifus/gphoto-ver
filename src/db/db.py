@@ -29,19 +29,18 @@ def db_cursor() -> Generator[psycopg.cursor.Cursor, None, None]:
     finally:
         dbpool.putconn(conn)
 
-def execute_file(filename: str) -> None:
-    if filename.endswith(".sql"):
-            with db_cursor() as cur:
-                try:
-                    cur.execute(open(filename,'r').read())
-                except DuplicateObject:
-                    print('ignoring dup obj error')
+def execute_dir(dir: str) -> None:
+    for filename in listdir(dir):
+        if filename.endswith(".sql"):
+                with db_cursor() as cur:
+                    try:
+                        cur.execute(open(f'{dir}/{filename}','r').read())
+                    except DuplicateObject:
+                        print('ignoring dup obj error')
 
 def setup() -> None:
-    for filename in listdir("src/db/sql/enums/"):
-        execute_file(f"src/db/sql/enums/{filename}") 
-    for filename in listdir("src/db/sql/setup/"):
-        execute_file(f"src/db/sql/setup/{filename}")
+    execute_dir(f"src/db/sql/enums/")
+    execute_dir(f"src/db/sql/setup/") 
 
 
 dbpool = psycopg_pool.ConnectionPool(
